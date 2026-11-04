@@ -106,7 +106,7 @@ async function verifyAuthenticode(file) {
 
 /** Resolve the release to install from, with sizes to sanity-check against. */
 async function resolveRelease(version) {
-  const tag = version || process.env.MCSM_PLAYIT_VERSION || DEFAULT_VERSION;
+  const tag = version || process.env.CRAFTKEEP_PLAYIT_VERSION || DEFAULT_VERSION;
   const release = await getJson(`${RELEASE_API}/tags/${tag}`, { cacheTtlMs: 60 * 60 * 1000, timeout: 20_000 });
 
   const find = (name) => release.assets?.find((a) => a.name === name) ?? null;
@@ -140,7 +140,7 @@ async function ensureBinary(kind) {
     await fsp.rm(target, { force: true });
   }
 
-  const release = await resolveRelease(process.env.MCSM_PLAYIT_VERSION);
+  const release = await resolveRelease(process.env.CRAFTKEEP_PLAYIT_VERSION);
   const asset = release[kind];
   if (!asset?.url) throw Object.assign(new Error(`No downloadable ${kind} for this platform.`), { status: 502 });
 
@@ -260,14 +260,14 @@ export class PlayitTunnel extends EventEmitter {
    *
    * @param {{ name?: string }} [options]
    */
-  async beginClaim({ name = 'Minecraft Server Manager' } = {}) {
+  async beginClaim({ name = 'Craftkeep' } = {}) {
     const cli = await this.#cli();
 
     const { stdout: codeOut } = await execFileAsync(cli, ['claim', 'generate'], { timeout: 30_000, windowsHide: true });
     const code = String(codeOut).trim().split(/\s+/).pop();
     if (!/^[a-z0-9]{6,}$/i.test(code)) throw new Error(`playit returned an unexpected claim code: "${codeOut.trim()}"`);
 
-    const safeName = String(name).replace(/[^\w .-]/g, '').slice(0, 40) || 'Minecraft Server Manager';
+    const safeName = String(name).replace(/[^\w .-]/g, '').slice(0, 40) || 'Craftkeep';
     const { stdout: urlOut } = await execFileAsync(cli, ['claim', 'url', code, '--name', safeName], {
       timeout: 30_000,
       windowsHide: true,
@@ -507,7 +507,7 @@ export class PlayitTunnel extends EventEmitter {
       lastError: this.lastError,
       pipe: this.pipePath,
       directory: tunnelDir(),
-      version: process.env.MCSM_PLAYIT_VERSION || DEFAULT_VERSION,
+      version: process.env.CRAFTKEEP_PLAYIT_VERSION || DEFAULT_VERSION,
       logTail: this.lines.slice(-120).map((l) => l.text),
     };
   }

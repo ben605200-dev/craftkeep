@@ -1,5 +1,5 @@
 /**
- * Minecraft Server Manager — backend.
+ * Craftkeep — backend.
  *
  * This module is a *library*. The only supported entry point is the Electron
  * desktop shell, which imports `startManager()` and runs the backend inside its
@@ -42,12 +42,12 @@ const ROOT_DIR = path.resolve(path.dirname(__filename), '..');
 /*
  * Where the renderer's assets come from.
  *
- * `MCSM_WEB_DIR` overrides it, which matters for a packaged build: the UI lives
+ * `CRAFTKEEP_WEB_DIR` overrides it, which matters for a packaged build: the UI lives
  * inside the read-only `app.asar`, so without an override every front-end tweak
  * would need a full rebuild and reinstall.
  */
-const WEB_DIR = process.env.MCSM_WEB_DIR
-  ? path.resolve(process.env.MCSM_WEB_DIR)
+const WEB_DIR = process.env.CRAFTKEEP_WEB_DIR
+  ? path.resolve(process.env.CRAFTKEEP_WEB_DIR)
   : path.join(ROOT_DIR, 'web');
 
 const log = createLogger('boot');
@@ -232,7 +232,7 @@ export async function startManager(options = {}) {
       if (error.code === 'EADDRINUSE') {
         reject(
           new Error(
-            `Port ${desiredPort} is already in use. Omit MCSM_PORT to let the app pick a free one.`,
+            `Port ${desiredPort} is already in use. Omit CRAFTKEEP_PORT to let the app pick a free one.`,
           ),
         );
       } else {

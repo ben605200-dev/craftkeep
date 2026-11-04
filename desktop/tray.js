@@ -80,7 +80,7 @@ export class AppTray {
   start() {
     const icons = images();
     this.tray = new Tray(icons.idle ?? icons.active ?? icons.blank);
-    this.tray.setToolTip('Minecraft Server Manager');
+    this.tray.setToolTip('Craftkeep');
 
     // Left-click focuses the window; right-click opens the menu (Windows/macOS).
     this.tray.on('click', () => this.onShow());
@@ -121,10 +121,10 @@ export class AppTray {
     this.tray.setImage(next ?? icons.blank);
 
     const tooltip = !servers.length
-      ? 'Minecraft Server Manager — no servers yet'
+      ? 'Craftkeep — no servers yet'
       : running.length
-        ? `Minecraft Server Manager — ${running.length} running${players ? `, ${players} player${players === 1 ? '' : 's'}` : ''}`
-        : 'Minecraft Server Manager — all stopped';
+        ? `Craftkeep — ${running.length} running${players ? `, ${players} player${players === 1 ? '' : 's'}` : ''}`
+        : 'Craftkeep — all stopped';
     this.tray.setToolTip(tooltip);
 
     const statusLine = !servers.length
@@ -132,7 +132,7 @@ export class AppTray {
       : `${running.length} of ${servers.length} running${players ? ` · ${players} playing` : ''}`;
 
     const template = [
-      { label: 'Minecraft Server Manager', enabled: false },
+      { label: 'Craftkeep', enabled: false },
       { label: statusLine, enabled: false },
       ...(crashed.length
         ? [{ label: `${crashed.length} crashed`, enabled: false }]

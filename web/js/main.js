@@ -130,7 +130,7 @@ async function boot_() {
   if (!desktop.isDesktop) {
     bootFail(
       'This window is not running inside the desktop app.',
-      'Minecraft Server Manager only runs as a desktop app. Launch it from the Start Menu, ' +
+      'Craftkeep only runs as a desktop app. Launch it from the Start Menu, ' +
         'the desktop shortcut, or `npm run app`.',
     );
     return;

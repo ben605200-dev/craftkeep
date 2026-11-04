@@ -266,7 +266,7 @@ export async function getMapping(gateway, { port, protocol = 'TCP' }) {
  *
  * @returns {Promise<{ ok: boolean, message: string, mapping?: object, reason?: string }>}
  */
-export async function addMapping(gateway, { port, internalPort, internalClient, protocol = 'TCP', description = 'Minecraft Server Manager' }) {
+export async function addMapping(gateway, { port, internalPort, internalClient, protocol = 'TCP', description = 'Craftkeep' }) {
   try {
     await soap(gateway.controlUrl, gateway.serviceType, 'AddPortMapping', {
       NewRemoteHost: '',

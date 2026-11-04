@@ -190,7 +190,7 @@ async function handleRoute() {
 
   const title =
     typeof entry.title === 'function' ? entry.title({ params, query }) : result.title ?? entry.title ?? 'Dashboard';
-  document.title = `${title} · Minecraft Server Manager`;
+  document.title = `${title} · Craftkeep`;
 
   onNavigate?.({ path, params, query, title, crumbs: result.crumbs ?? [], result });
 
@@ -213,7 +213,7 @@ function renderNotFound(path) {
       <a class="btn btn--primary" href="#/dashboard" style="margin-top:0.5rem">Back to the dashboard</a>
     </div>`;
   viewport.replaceChildren(node);
-  document.title = 'Not found · Minecraft Server Manager';
+  document.title = 'Not found · Craftkeep';
   onNavigate?.({ path, params: {}, query: {}, title: 'Not found', crumbs: [] });
 }
 
@@ -246,7 +246,7 @@ function renderError(error, path) {
   node.querySelector('#err-reload').addEventListener('click', () => location.reload());
 
   viewport.replaceChildren(node);
-  document.title = 'Error · Minecraft Server Manager';
+  document.title = 'Error · Craftkeep';
   onNavigate?.({ path, params: {}, query: {}, title: 'Error', crumbs: [] });
 }
 

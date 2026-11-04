@@ -1,7 +1,7 @@
 /**
  * REST client.
  *
- * Every mutating request sends `X-Requested-With: MinecraftServerManager`,
+ * Every mutating request sends `X-Requested-With: Craftkeep`,
  * which the backend requires — it also makes cross-site requests impossible,
  * since a custom header forces a CORS preflight that is never answered.
  */
@@ -50,7 +50,7 @@ async function request(method, path, { body, headers = {}, raw = false, signal, 
 
   const token = getAuthToken();
   const finalHeaders = {
-    'x-requested-with': 'MinecraftServerManager',
+    'x-requested-with': 'Craftkeep',
     ...headers,
   };
   if (token) finalHeaders.authorization = `Bearer ${token}`;
@@ -219,7 +219,7 @@ export const api = {
 
       xhr.open('PUT', url);
       const token = getAuthToken();
-      xhr.setRequestHeader('x-requested-with', 'MinecraftServerManager');
+      xhr.setRequestHeader('x-requested-with', 'Craftkeep');
       xhr.setRequestHeader('x-file-name', encodeURIComponent(file.name));
       xhr.setRequestHeader('content-type', 'application/octet-stream');
       if (token) xhr.setRequestHeader('authorization', `Bearer ${token}`);

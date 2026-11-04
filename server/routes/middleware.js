@@ -78,7 +78,7 @@ export function securityGate(req, res, next) {
   }
 
   const mutating = !['GET', 'HEAD', 'OPTIONS'].includes(req.method);
-  if (mutating && req.get('x-requested-with') !== 'MinecraftServerManager') {
+  if (mutating && req.get('x-requested-with') !== 'Craftkeep') {
     return res.status(400).json({
       error: 'Missing X-Requested-With header.',
       code: 'missing-header',

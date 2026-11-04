@@ -239,7 +239,7 @@ export async function isPortReachableOnLan(port) {
 // Windows firewall
 // ---------------------------------------------------------------------------
 
-const firewallRuleName = (port) => `Minecraft Server Manager (TCP ${port})`;
+const firewallRuleName = (port) => `Craftkeep (TCP ${port})`;
 
 /**
  * Is there an inbound allow rule for this port?

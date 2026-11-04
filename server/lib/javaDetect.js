@@ -4,7 +4,7 @@
  * Discovery strategy — cheapest first:
  *   1. `JAVA_HOME` and the `java` on `PATH`  (the user already picked one)
  *   2. Well-known vendor install roots for the current OS
- *   3. `MCSM_EXTRA_JAVA_DIRS`
+ *   3. `CRAFTKEEP_EXTRA_JAVA_DIRS`
  *   4. Anything we previously downloaded into `<data>/java`
  *
  * Each candidate is probed exactly once with `java -XshowSettings:properties

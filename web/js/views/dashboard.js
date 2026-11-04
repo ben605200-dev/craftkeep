@@ -512,7 +512,7 @@ function greeting() {
 /** First-run checklist modal. */
 function showOnboarding(onboarding) {
   const modal = openModal({
-    title: 'Welcome to Minecraft Server Manager',
+    title: 'Welcome to Craftkeep',
     subtitle: 'A couple of quick checks before your first server',
     icon: 'rocket',
     size: 'default',

@@ -18,6 +18,9 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist-app');
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
 
+/** The product name as electron-builder sees it — one source of truth. */
+const APP_NAME = pkg.build?.productName ?? 'Craftkeep';
+
 if (!fs.existsSync(DIST)) {
   console.error('No dist-app/ yet — build first with `npm run dist`.');
   process.exit(1);
@@ -46,7 +49,7 @@ const installer = artifacts.find((n) => n.endsWith('.exe')) ?? artifacts[0];
 const zipName = artifacts.find((n) => n.endsWith('.zip'));
 const mb = (n) => `${(fs.statSync(path.join(DIST, n)).size / 1024 / 1024).toFixed(1)} MB`;
 
-const howTo = `Minecraft Server Manager ${pkg.version}
+const howTo = `${APP_NAME} ${pkg.version}
 How to install and run it on your PC
 =================================================
 
@@ -65,8 +68,7 @@ Install (recommended)
      "Run anyway". You can verify the file yourself first (see below).
   3. Follow the wizard. Everything goes into your own user folder, so no
      administrator rights are needed.
-  4. Start "Minecraft Server Manager" from the Start menu or the desktop
-     shortcut.
+  4. Start "${APP_NAME}" from the Start menu or the desktop shortcut.
 
 No-install option
 -----------------
@@ -74,7 +76,7 @@ ${
   zipName
     ? `  1. Right-click ${zipName} and choose "Extract All..." first.
      Running the app from inside the ZIP file does not work.
-  2. Open the extracted folder and run "Minecraft Server Manager.exe".
+  2. Open the extracted folder and run "${APP_NAME}.exe".
   3. Keep the folder together — the app needs the files next to it.
 
   Windows shows the same "Windows protected your PC" warning as the
@@ -88,14 +90,14 @@ Verify your download (optional)
 
       Get-FileHash .\\${installer} -Algorithm SHA256
 
-  The printed hash must match the first line of SHA256SUMS.txt. If it does
-  not, don't run the file and ask the sender to re-send it.
+  The printed hash must match the line for ${installer} in SHA256SUMS.txt.
+  If it does not, don't run the file and ask the sender to re-send it.
 
 First run
 ---------
   - The app starts empty. Nothing from the sender's machine is included.
   - Your servers, backups and logs stay in your own profile:
-        %APPDATA%\\Minecraft Server Manager
+        %APPDATA%\\${APP_NAME}
   - Java is detected automatically. If the version a server needs is
     missing, the app can download a matching JDK from Adoptium for you.
   - To let friends join a server when port forwarding is impossible

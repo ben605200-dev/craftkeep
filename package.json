@@ -1,11 +1,11 @@
 {
-  "name": "minecraft-server-manager",
-  "version": "1.0.0",
+  "name": "craftkeep",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "description": "Desktop app for provisioning, running and monitoring Vanilla, Paper and Fabric Minecraft servers.",
   "author": {
-    "name": "Minecraft Server Manager"
+    "name": "Craftkeep"
   },
   "license": "MIT",
   "main": "desktop/main.js",
@@ -36,10 +36,10 @@
     "electron-builder": "^26.18.0"
   },
   "build": {
-    "appId": "com.mcsm.servermanager",
-    "productName": "Minecraft Server Manager",
-    "copyright": "Minecraft Server Manager",
-    "artifactName": "Minecraft-Server-Manager-${version}-${os}-${arch}.${ext}",
+    "appId": "com.craftkeep.desktop",
+    "productName": "Craftkeep",
+    "copyright": "Craftkeep",
+    "artifactName": "Craftkeep-${version}-${os}-${arch}.${ext}",
     "directories": {
       "output": "dist-app",
       "buildResources": "desktop/icons"
@@ -80,8 +80,8 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Minecraft Server Manager",
-      "artifactName": "Minecraft-Server-Manager-Setup-${version}.${ext}"
+      "shortcutName": "Craftkeep",
+      "artifactName": "Craftkeep-Setup-${version}.${ext}"
     },
     "mac": {
       "icon": "desktop/icons/icon.png",

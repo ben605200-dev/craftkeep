@@ -7,8 +7,8 @@
  * what makes it impossible to attach a diagnostic tool. This script relaxes two
  * of those three things for local debugging only:
  *
- *   - `MCSM_PORT=31415` pins the port (still loopback, still token-gated).
- *   - `MCSM_DEBUG_TRANSPORT=1` makes the app log the token.
+ *   - `CRAFTKEEP_PORT=31415` pins the port (still loopback, still token-gated).
+ *   - `CRAFTKEEP_DEBUG_TRANSPORT=1` makes the app log the token.
  *
  * The token is still generated per launch and never persisted, so this does not
  * open a stable, reusable door — it just makes the current door findable while
@@ -17,7 +17,7 @@
  * Usage:
  *   npm run app:debug
  *   # then, in another shell, using the token printed by the app:
- *   $env:MCSM_TOKEN="<token>"; node scripts/smoke-test.mjs
+ *   $env:CRAFTKEEP_TOKEN="<token>"; node scripts/smoke-test.mjs
  */
 
 import { spawn } from 'node:child_process';
@@ -29,8 +29,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const env = {
   ...process.env,
-  MCSM_PORT: process.env.MCSM_PORT || '31415',
-  MCSM_DEBUG_TRANSPORT: '1',
+  CRAFTKEEP_PORT: process.env.CRAFTKEEP_PORT || '31415',
+  CRAFTKEEP_DEBUG_TRANSPORT: '1',
 };
 
 // Resolve the Electron binary from node_modules so this works without a global
@@ -50,7 +50,7 @@ if (!electronBinary || typeof electronBinary !== 'string') {
   process.exit(1);
 }
 
-console.log('Launching with a pinned, token-gated transport on http://127.0.0.1:' + env.MCSM_PORT);
+console.log('Launching with a pinned, token-gated transport on http://127.0.0.1:' + env.CRAFTKEEP_PORT);
 console.log('The session token will be printed with the app\'s log output.');
 console.log('');
 

@@ -289,7 +289,7 @@ export function serverRoutes({ registry, scheduler, gateway, provisioner }) {
     await atomicWrite(
       file,
       stringifyProperties(current, SERVER_PROPERTIES_ORDER, {
-        header: `Minecraft server properties\nManaged by Minecraft Server Manager\nLast edited ${new Date().toUTCString()}`,
+        header: `Minecraft server properties\nManaged by Craftkeep\nLast edited ${new Date().toUTCString()}`,
       }),
     );
 
@@ -308,7 +308,7 @@ export function serverRoutes({ registry, scheduler, gateway, provisioner }) {
     const managed = registry.get(req.params.id);
     await atomicWrite(
       path.join(managed.def.dir, 'eula.txt'),
-      `#By changing the setting below to TRUE you are indicating your agreement to our EULA (https://aka.ms/MinecraftEULA).\n#Accepted via Minecraft Server Manager on ${new Date().toUTCString()}\neula=true\n`,
+      `#By changing the setting below to TRUE you are indicating your agreement to our EULA (https://aka.ms/MinecraftEULA).\n#Accepted via Craftkeep on ${new Date().toUTCString()}\neula=true\n`,
     );
     managed.console.push('\n[manager] eula.txt updated to eula=true.\n\n', 'stdout');
     managed.failure = null;
@@ -438,7 +438,7 @@ export function serverRoutes({ registry, scheduler, gateway, provisioner }) {
         ? { uuid: '00000000-0000-0000-0000-000000000000', name, level: Number(req.body?.level) || 4, bypassesPlayerLimit: Boolean(req.body?.bypassesPlayerLimit) }
         : list === 'whitelist'
           ? { uuid: '00000000-0000-0000-0000-000000000000', name }
-          : { uuid: '00000000-0000-0000-0000-000000000000', name, created: new Date().toISOString(), source: 'Minecraft Server Manager', expires: 'forever', reason: String(req.body?.reason ?? 'Banned by an operator.') };
+          : { uuid: '00000000-0000-0000-0000-000000000000', name, created: new Date().toISOString(), source: 'Craftkeep', expires: 'forever', reason: String(req.body?.reason ?? 'Banned by an operator.') };
 
     filtered.push(entry);
     await atomicWrite(filePath, `${JSON.stringify(filtered, null, 2)}\n`);
@@ -504,7 +504,7 @@ export function serverRoutes({ registry, scheduler, gateway, provisioner }) {
     await atomicWrite(
       file,
       stringifyProperties(merged, SERVER_PROPERTIES_ORDER, {
-        header: `Minecraft server properties\nManaged by Minecraft Server Manager\nLast edited ${new Date().toUTCString()}`,
+        header: `Minecraft server properties\nManaged by Craftkeep\nLast edited ${new Date().toUTCString()}`,
       }),
     );
 

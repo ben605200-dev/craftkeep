@@ -282,7 +282,7 @@ export class SettingsStore {
     const stored = await readJson(this.file, null);
     this.values = { ...DEFAULT_SETTINGS, ...(stored?.values ?? {}) };
     // Env wins over the stored file for the Java toggle.
-    if (process.env.MCSM_AUTO_DOWNLOAD_JAVA) this.values.autoDownloadJava = config.autoDownloadJava;
+    if (process.env.CRAFTKEEP_AUTO_DOWNLOAD_JAVA) this.values.autoDownloadJava = config.autoDownloadJava;
     this.loaded = true;
     return this.values;
   }

@@ -1,5 +1,5 @@
 /**
- * Central configuration for the Minecraft Server Manager.
+ * Central configuration for Craftkeep.
  *
  * Everything is derived from (in order of precedence):
  *   1. real environment variables
@@ -77,10 +77,10 @@ const LOOPBACK_HOST = '127.0.0.1';
  * Port to listen on.
  *
  * `0` means "let the OS pick a free port", which is the default: an unguessable
- * port is one less thing to get wrong. `MCSM_PORT` pins a specific one, which is
+ * port is one less thing to get wrong. `CRAFTKEEP_PORT` pins a specific one, which is
  * only useful for diagnostics.
  */
-const PORT = toInt(process.env.MCSM_PORT, 0);
+const PORT = toInt(process.env.CRAFTKEEP_PORT, 0);
 
 export const config = {
   rootDir: ROOT_DIR,
@@ -93,7 +93,7 @@ export const config = {
    * The desktop shell generates it and hands it to the renderer through the
    * preload bridge.
    */
-  token: (process.env.MCSM_TOKEN || '').trim(),
+  token: (process.env.CRAFTKEEP_TOKEN || '').trim(),
   /** Always true — kept so defences can assert "loopback only" explicitly. */
   isLocalOnly: true,
   /** Where the renderer was told to connect. */
@@ -102,8 +102,8 @@ export const config = {
   },
 
   // -- Filesystem layout ----------------------------------------------------
-  serversDir: resolvePath(process.env.MCSM_SERVERS_DIR, path.join(ROOT_DIR, 'servers')),
-  dataDir: resolvePath(process.env.MCSM_DATA_DIR, path.join(ROOT_DIR, 'data')),
+  serversDir: resolvePath(process.env.CRAFTKEEP_SERVERS_DIR, path.join(ROOT_DIR, 'servers')),
+  dataDir: resolvePath(process.env.CRAFTKEEP_DATA_DIR, path.join(ROOT_DIR, 'data')),
 
   /*
    * `backupsDir` and `jdkDir` default to subfolders of `dataDir`, so they are
@@ -115,14 +115,14 @@ export const config = {
   _jdkDirOverride: null,
 
   get backupsDir() {
-    return this._backupsDirOverride ?? resolvePath(process.env.MCSM_BACKUPS_DIR, path.join(this.dataDir, 'backups'));
+    return this._backupsDirOverride ?? resolvePath(process.env.CRAFTKEEP_BACKUPS_DIR, path.join(this.dataDir, 'backups'));
   },
   set backupsDir(value) {
     this._backupsDirOverride = value ? path.resolve(value) : null;
   },
 
   get jdkDir() {
-    return this._jdkDirOverride ?? resolvePath(process.env.MCSM_JDK_DIR, path.join(this.dataDir, 'java'));
+    return this._jdkDirOverride ?? resolvePath(process.env.CRAFTKEEP_JDK_DIR, path.join(this.dataDir, 'java'));
   },
   set jdkDir(value) {
     this._jdkDirOverride = value ? path.resolve(value) : null;
@@ -148,15 +148,15 @@ export const config = {
 
   // -- Resource tuning ------------------------------------------------------
   /** Interval between CPU/RAM samples, in milliseconds. */
-  statsIntervalMs: Math.max(1000, toInt(process.env.MCSM_STATS_INTERVAL_MS, 2000)),
+  statsIntervalMs: Math.max(1000, toInt(process.env.CRAFTKEEP_STATS_INTERVAL_MS, 2000)),
   /** RAM (MiB) always left available for the OS + the manager itself. */
-  reservedRamMb: Math.max(512, toInt(process.env.MCSM_RESERVED_RAM_MB, 2048)),
+  reservedRamMb: Math.max(512, toInt(process.env.CRAFTKEEP_RESERVED_RAM_MB, 2048)),
   /** Upper bound for a single server heap when auto-tuning. 0 = derive from RAM. */
-  maxHeapMbOverride: toInt(process.env.MCSM_MAX_HEAP_MB, 0),
+  maxHeapMbOverride: toInt(process.env.CRAFTKEEP_MAX_HEAP_MB, 0),
   /** Allow fetching a JDK from Adoptium when the required one is missing. */
-  autoDownloadJava: toBool(process.env.MCSM_AUTO_DOWNLOAD_JAVA, false),
+  autoDownloadJava: toBool(process.env.CRAFTKEEP_AUTO_DOWNLOAD_JAVA, false),
   /** Additional directories to search for JDKs. */
-  extraJavaDirs: (process.env.MCSM_EXTRA_JAVA_DIRS || '')
+  extraJavaDirs: (process.env.CRAFTKEEP_EXTRA_JAVA_DIRS || '')
     .split(/[;,]/)
     .map((s) => s.trim())
     .filter(Boolean),
@@ -178,7 +178,7 @@ export const config = {
   httpRetries: 3,
   httpTimeoutMs: 30_000,
   /** User-Agent sent to upstream APIs. */
-  userAgent: `MinecraftServerManager/1.0.0 (${os.platform()}; Node ${process.versions.node})`,
+  userAgent: `Craftkeep/1.0.0 (${os.platform()}; Node ${process.versions.node})`,
   /** Version of the bundled web UI, surfaced to clients. */
   uiVersion: '1.0.0',
 };

@@ -33,7 +33,7 @@ export function tunnelRoutes({ tunnel, gateway }) {
   router.post('/claim', validateBody({
     name: { type: 'string', maxLength: 40 },
   }), asyncHandler(async (req, res) => {
-    const claim = await tunnel.beginClaim({ name: req.validated.name ?? 'Minecraft Server Manager' });
+    const claim = await tunnel.beginClaim({ name: req.validated.name ?? 'Craftkeep' });
     res.status(202).json({ ok: true, ...claim, snapshot: tunnel.snapshot() });
   }));
 

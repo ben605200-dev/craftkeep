@@ -35,7 +35,7 @@ export function buildAppMenu({ send, getState, onQuit, paths, configFile }) {
         { role: 'hideOthers' },
         { role: 'unhide' },
         { type: 'separator' },
-        { label: 'Quit Minecraft Server Manager', accelerator: 'Cmd+Q', click: () => onQuit() },
+        { label: 'Quit Craftkeep', accelerator: 'Cmd+Q', click: () => onQuit() },
       ],
     });
   }
@@ -182,7 +182,7 @@ export function buildAppMenu({ send, getState, onQuit, paths, configFile }) {
           dialog.showMessageBox({
             type: 'info',
             title: 'About',
-            message: `Minecraft Server Manager ${app.getVersion()}`,
+            message: `Craftkeep ${app.getVersion()}`,
             detail:
               `Electron ${process.versions.electron}\n` +
               `Chromium ${process.versions.chrome}\n` +

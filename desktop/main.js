@@ -31,6 +31,7 @@ import { startManager } from '../server/index.js';
 import { buildAppMenu } from './menu.js';
 import { AppTray, setBadge } from './tray.js';
 import desktopConfig from './config.js';
+import { adoptLegacyUserData } from './userData.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..');
@@ -43,24 +44,49 @@ const BOOT_TIMEOUT_MS = 45_000;
 // Identity — must happen before anything reads a path
 // ---------------------------------------------------------------------------
 
-const PRODUCT_NAME = 'Minecraft Server Manager';
+const PRODUCT_NAME = 'Craftkeep';
+
+/**
+ * The app shipped briefly under this name; user data may still live there.
+ * @see adoptLegacyUserData
+ */
+const LEGACY_PRODUCT_NAME = 'Minecraft Server Manager';
 
 app.setName(PRODUCT_NAME);
-app.setAppUserModelId('com.mcsm.servermanager');
+app.setAppUserModelId('com.craftkeep.desktop');
 
 /*
  * Pin `userData` explicitly.
  *
  * Electron derives it from `app.getName()`, but Chromium resolves some paths
  * during startup — before this module runs — so relying on `setName()` alone
- * left the folder named after the npm package (`minecraft-server-manager`)
- * instead of the product. Setting the path is deterministic either way.
+ * left the folder named after the npm package (`craftkeep`) instead of the
+ * product. Setting the path is deterministic either way.
  */
 if (process.platform !== 'darwin') {
   try {
     app.setPath('userData', path.join(app.getPath('appData'), PRODUCT_NAME));
   } catch {
     /* not fatal — we simply keep Electron's default location */
+  }
+}
+
+/*
+ * Adopt data from the previous name.
+ *
+ * Servers, backups, logs, downloaded JDKs and window preferences all live in
+ * the user-data folder, which is derived from the product name. Renaming the
+ * app would otherwise look like a factory reset, so on first launch under the
+ * new name those entries are moved across. The mechanics live in
+ * `desktop/userData.js`, where they are covered by tests.
+ */
+if (process.platform !== 'darwin') {
+  const adopted = adoptLegacyUserData({
+    targetDir: app.getPath('userData'),
+    legacyDir: path.join(app.getPath('appData'), LEGACY_PRODUCT_NAME),
+  });
+  if (adopted.moved.length) {
+    console.log(`[desktop] adopted user data from the previous name: ${adopted.moved.join(', ')}`);
   }
 }
 
@@ -84,7 +110,7 @@ if (!app.requestSingleInstanceLock()) {
  * Packaged: the OS user-data folder — an installed app's own directory is
  * read-only (and inside an asar archive), so writing there would fail.
  * From source: the repository, so `npm run app` works against the checkout you
- * are editing. An explicit MCSM_* environment variable always wins.
+ * are editing. An explicit CRAFTKEEP_* environment variable always wins.
  */
 function resolvePaths() {
   const fromEnv = (key) => (process.env[key] ? path.resolve(process.env[key]) : null);
@@ -92,18 +118,18 @@ function resolvePaths() {
   if (!app.isPackaged) {
     return {
       root: REPO_ROOT,
-      servers: fromEnv('MCSM_SERVERS_DIR') ?? path.join(REPO_ROOT, 'servers'),
-      data: fromEnv('MCSM_DATA_DIR') ?? path.join(REPO_ROOT, 'data'),
+      servers: fromEnv('CRAFTKEEP_SERVERS_DIR') ?? path.join(REPO_ROOT, 'servers'),
+      data: fromEnv('CRAFTKEEP_DATA_DIR') ?? path.join(REPO_ROOT, 'data'),
       readme: path.join(REPO_ROOT, 'README.md'),
       mode: 'development',
     };
   }
 
   const userData = app.getPath('userData');
-  const data = fromEnv('MCSM_DATA_DIR') ?? path.join(userData, 'data');
+  const data = fromEnv('CRAFTKEEP_DATA_DIR') ?? path.join(userData, 'data');
   return {
     root: userData,
-    servers: fromEnv('MCSM_SERVERS_DIR') ?? path.join(userData, 'servers'),
+    servers: fromEnv('CRAFTKEEP_SERVERS_DIR') ?? path.join(userData, 'servers'),
     data,
     readme: path.join(REPO_ROOT, 'README.md'),
     mode: 'packaged',
@@ -154,7 +180,7 @@ function createSplash() {
     transparent: false,
     backgroundColor: '#08090c',
     icon: ICON_PATH,
-    title: 'Minecraft Server Manager',
+    title: 'Craftkeep',
     // No untrusted content: the preload writes into the DOM directly.
     webPreferences: {
       preload: path.join(__dirname, 'splash-preload.cjs'),
@@ -195,7 +221,7 @@ function createMainWindow(url, { route = null } = {}) {
     frame: true,
     backgroundColor: '#08090c',
     icon: ICON_PATH,
-    title: 'Minecraft Server Manager',
+    title: 'Craftkeep',
     autoHideMenuBar: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
@@ -378,7 +404,7 @@ async function requestQuit() {
   if (running > 0) {
     const { response } = await dialog.showMessageBox(mainWindow ?? undefined, {
       type: 'warning',
-      title: 'Quit Minecraft Server Manager?',
+      title: 'Quit Craftkeep?',
       message: `${running} server${running === 1 ? ' is' : 's are'} still running.`,
       detail:
         'Quitting asks each server to stop cleanly and saves every world first, so this can take a moment.\n\n' +
@@ -555,7 +581,7 @@ function registerIpc() {
     if (!desktopConfig.get().notifications) return { ok: false, error: 'notifications disabled' };
     if (!Notification.isSupported()) return { ok: false, error: 'unsupported' };
     new Notification({
-      title: String(payload.title ?? 'Minecraft Server Manager'),
+      title: String(payload.title ?? 'Craftkeep'),
       body: String(payload.body ?? ''),
       icon: nativeImage.createFromPath(ICON_PATH),
       silent: payload.silent !== false,
@@ -655,7 +681,7 @@ function parseRouteArgument() {
 }
 
 async function boot() {
-  const devUrl = process.env.MCSM_DEV_URL;
+  const devUrl = process.env.CRAFTKEEP_DEV_URL;
   const startRoute = parseRouteArgument();
 
   // A dev URL means "attach to an already-running backend", which is the fast
@@ -677,8 +703,8 @@ async function boot() {
     manager = await startManager({
       token: sessionToken,
       // A port of 0 lets the OS pick a free one, so there is no stable URL to
-      // collide over (or to bookmark). MCSM_PORT pins it for diagnostics only.
-      port: Number(process.env.MCSM_PORT) || 0,
+      // collide over (or to bookmark). CRAFTKEEP_PORT pins it for diagnostics only.
+      port: Number(process.env.CRAFTKEEP_PORT) || 0,
       paths: { serversDir: paths.servers, dataDir: paths.data, backupsDir: backups },
       banner: false,
     });
@@ -690,7 +716,7 @@ async function boot() {
 
     const { response } = await dialog.showMessageBox({
       type: 'error',
-      title: 'Minecraft Server Manager could not start',
+      title: 'Craftkeep could not start',
       message: error?.message ?? 'Unknown error',
       detail:
         `${error?.hint ?? ''}\n\n` +
@@ -759,7 +785,7 @@ async function boot() {
   });
 
   console.log(`[desktop] transport ready on ${manager.url} (${paths.mode} paths, loopback + token)`);
-  if (process.env.MCSM_DEBUG_TRANSPORT === '1') {
+  if (process.env.CRAFTKEEP_DEBUG_TRANSPORT === '1') {
     // Opt-in only: lets a local diagnostic tool attach to the transport.
     console.log(`[desktop] debug transport token: ${sessionToken}`);
   }

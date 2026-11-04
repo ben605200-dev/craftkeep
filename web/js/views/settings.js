@@ -753,7 +753,7 @@ export async function renderSettings({ query }) {
             onclick: async () => {
               const running = serverList().filter((s) => ['running', 'starting'].includes(s.status));
               const ok = await confirmDialog({
-                title: 'Quit Minecraft Server Manager?',
+                title: 'Quit Craftkeep?',
                 message: running.length
                   ? `${running.length} running server${running.length === 1 ? '' : 's'} will be stopped first.`
                   : 'No servers are running.',
@@ -813,7 +813,7 @@ export async function renderSettings({ query }) {
     dangerCard,
     el(
       'p.dim.tiny.center',
-      `Minecraft Server Manager v${system?.app?.version ?? '1.0.0'} · ` +
+      `Craftkeep v${system?.app?.version ?? '1.0.0'} · ` +
         `Electron ${desktop.shellVersions?.electron ?? '?'} · ` +
         `running on ${system?.system?.platform ?? 'unknown'} · ` +
         `data in ${system?.paths?.data ?? 'the data folder'}`,

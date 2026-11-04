@@ -11,7 +11,7 @@ import path from 'node:path';
 import { config, ensureDirectories } from './config.js';
 
 const LEVELS = { trace: 10, debug: 20, info: 30, warn: 40, error: 50, fatal: 60 };
-const activeLevel = LEVELS[(process.env.MCSM_LOG_LEVEL || 'info').toLowerCase()] ?? LEVELS.info;
+const activeLevel = LEVELS[(process.env.CRAFTKEEP_LOG_LEVEL || 'info').toLowerCase()] ?? LEVELS.info;
 
 const ANSI = {
   reset: '\x1b[0m',

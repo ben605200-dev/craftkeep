@@ -1,4 +1,4 @@
-# Minecraft Server Manager
+# Craftkeep
 
 A **desktop app** that provisions, runs and monitors Minecraft servers — Vanilla, Paper and
 Fabric — from one dashboard. It downloads the right jar, works out which Java the version
@@ -17,11 +17,11 @@ anywhere except the jar downloads from Mojang / PaperMC / Fabric.
 
 **[Download for Windows](releases/latest)** — installer or portable `.zip`, from the latest
 GitHub release. There is also a download page with screenshots and install notes:
-**<https://ben605200-dev.github.io/MSM/>**
+**<https://ben605200-dev.github.io/craftkeep/>**
 
 - **Installer** — per-user, no administrator rights required; adds Start Menu and desktop
   shortcuts.
-- **Portable `.zip`** — unzip anywhere and run `Minecraft Server Manager.exe`.
+- **Portable `.zip`** — unzip anywhere and run `Craftkeep.exe`.
 - Every release also carries `SHA256SUMS.txt` and `HOW-TO-INSTALL.txt`, so a download can be
   verified before it runs.
 
@@ -39,7 +39,7 @@ npm install
 npm run app
 ```
 
-Or, if you have installed it, launch **Minecraft Server Manager** from the Start Menu or the
+Or, if you have installed it, launch **Craftkeep** from the Start Menu or the
 desktop shortcut. Press **Create server** and the wizard handles the rest.
 
 > **Node 20+ is required to run from source.** If `java` is not already installed, the wizard
@@ -168,7 +168,7 @@ this project deliberately does **not** have is a browser-accessible server:
 Point a browser at the port and you get a plain refusal:
 
 > **This window is not running inside the desktop app.**
-> Minecraft Server Manager only runs as a desktop app. Launch it from the Start Menu, the
+> Craftkeep only runs as a desktop app. Launch it from the Start Menu, the
 > desktop shortcut, or `npm run app`.
 
 That is the whole point: the interface is a window, not a website.
@@ -274,11 +274,11 @@ Each build runs `npm run audit` before finishing. It reads the `app.asar` file t
 fails the build if any local state has leaked in — `data/`, `servers/`, `.env`, logs or
 archives — then asserts the entry point, UI and runtime dependencies are all present. An
 installed app keeps every bit of its state in the recipient's own
-`%APPDATA%\Minecraft Server Manager`; nothing is shared between machines.
+`%APPDATA%\Craftkeep`; nothing is shared between machines.
 
 ### Publishing a release
 
-The repo at `github.com/ben605200-dev/MSM` distributes the same files through GitHub — the
+The repo at `github.com/ben605200-dev/craftkeep` distributes the same files through GitHub — the
 download page reads the newest release automatically, so nothing on the site needs editing:
 
 ```powershell
@@ -298,11 +298,11 @@ gh release create v1.0.1 --title "v1.0.1" --notes "What changed..." `
 
 | | Running from source | Installed build |
 | --- | --- | --- |
-| Servers | `./servers` | `%APPDATA%\Minecraft Server Manager\servers` |
-| Backups, logs, downloaded JDKs | `./data` | `%APPDATA%\Minecraft Server Manager\data` |
-| Window preferences | — | `%APPDATA%\Minecraft Server Manager\desktop-config.json` |
+| Servers | `./servers` | `%APPDATA%\Craftkeep\servers` |
+| Backups, logs, downloaded JDKs | `./data` | `%APPDATA%\Craftkeep\data` |
+| Window preferences | — | `%APPDATA%\Craftkeep\desktop-config.json` |
 
-Overridable with `MCSM_SERVERS_DIR` and `MCSM_DATA_DIR`. **File › Where are my files?** shows the
+Overridable with `CRAFTKEEP_SERVERS_DIR` and `CRAFTKEEP_DATA_DIR`. **File › Where are my files?** shows the
 real paths and opens the folder. See `.env.example` for everything else.
 
 ### Developing the interface
@@ -312,8 +312,8 @@ normally need a rebuild and reinstall. To skip that, point an installed build at
 checkout:
 
 ```powershell
-$env:MCSM_WEB_DIR = "C:\dev\minecraft-server-manager\web"
-& "$env:LOCALAPPDATA\Programs\Minecraft Server Manager\Minecraft Server Manager.exe"
+$env:CRAFTKEEP_WEB_DIR = "C:\dev\craftkeep\web"
+& "$env:LOCALAPPDATA\Programs\Craftkeep\Craftkeep.exe"
 ```
 
 The startup log prints `Serve UI from …` so you can always tell which copy is live.
@@ -383,7 +383,7 @@ OS-chosen port. You can confirm that yourself while it is running:
 
 ```powershell
 Get-NetTCPConnection -State Listen |
-  Where-Object OwningProcess -in (Get-Process "Minecraft Server Manager").Id |
+  Where-Object OwningProcess -in (Get-Process "Craftkeep").Id |
   Select-Object LocalAddress, LocalPort
 ```
 

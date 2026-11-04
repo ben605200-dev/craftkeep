@@ -11,8 +11,8 @@
  * app:debug` pins the port and prints the token:
  *
  *   npm run app:debug                              # terminal 1
- *   $env:MCSM_PORT="31415"                         # terminal 2
- *   $env:MCSM_TOKEN="<token from the app log>"
+ *   $env:CRAFTKEEP_PORT="31415"                         # terminal 2
+ *   $env:CRAFTKEEP_TOKEN="<token from the app log>"
  *   node scripts/smoke-test.mjs <serverId>
  *
  * The SLP, console and backup checks need the server to be *running*; the rest
@@ -22,22 +22,22 @@
 import { resolveJvmFlags } from '../server/lib/jvmFlags.js';
 import { pingServer } from '../server/lib/slp.js';
 
-const PORT = process.env.MCSM_PORT ?? '31415';
-const TOKEN = process.env.MCSM_TOKEN ?? '';
+const PORT = process.env.CRAFTKEEP_PORT ?? '31415';
+const TOKEN = process.env.CRAFTKEEP_TOKEN ?? '';
 const BASE = `http://127.0.0.1:${PORT}`;
 const SERVER_ID = process.argv[2] ?? 'test-smp';
 const HEADERS = {
-  'x-requested-with': 'MinecraftServerManager',
+  'x-requested-with': 'Craftkeep',
   'content-type': 'application/json',
   ...(TOKEN ? { authorization: `Bearer ${TOKEN}` } : {}),
 };
 
 if (!TOKEN) {
   console.error(
-    '\n\x1b[31mNo MCSM_TOKEN set.\x1b[0m\n' +
+    '\n\x1b[31mNo CRAFTKEEP_TOKEN set.\x1b[0m\n' +
       'The transport requires the per-launch session token.\n' +
       'Run `npm run app:debug`, copy the token it prints, then:\n' +
-      `  $env:MCSM_PORT="${PORT}"; $env:MCSM_TOKEN="<token>"\n\n`,
+      `  $env:CRAFTKEEP_PORT="${PORT}"; $env:CRAFTKEEP_TOKEN="<token>"\n\n`,
   );
   process.exit(2);
 }
