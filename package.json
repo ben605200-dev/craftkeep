@@ -1,0 +1,102 @@
+{
+  "name": "minecraft-server-manager",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Desktop app for provisioning, running and monitoring Vanilla, Paper and Fabric Minecraft servers.",
+  "author": {
+    "name": "Minecraft Server Manager"
+  },
+  "license": "MIT",
+  "main": "desktop/main.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "postinstall": "node scripts/make-icons.mjs",
+    "app": "electron .",
+    "app:dev": "electron . --enable-logging",
+    "app:debug": "node scripts/dev-transport.mjs",
+    "icons": "node scripts/make-icons.mjs",
+    "test": "node --test test/",
+    "check": "node scripts/check-imports.mjs",
+    "smoke": "node scripts/smoke-test.mjs",
+    "verify": "npm run check && npm test",
+    "dist": "npm run icons && electron-builder && npm run audit && npm run checksums",
+    "dist:dir": "npm run icons && electron-builder --dir",
+    "audit": "node scripts/audit-bundle.mjs",
+    "checksums": "node scripts/checksums.mjs"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "electron": "^45.2.1",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "com.mcsm.servermanager",
+    "productName": "Minecraft Server Manager",
+    "copyright": "Minecraft Server Manager",
+    "artifactName": "Minecraft-Server-Manager-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "output": "dist-app",
+      "buildResources": "desktop/icons"
+    },
+    "files": [
+      "desktop/**/*",
+      "server/**/*",
+      "web/**/*",
+      "scripts/make-icons.mjs",
+      "README.md",
+      "package.json",
+      "!**/*.map",
+      "!**/node_modules/**/{test,__tests__,docs,example,examples}/**"
+    ],
+    "extraMetadata": {
+      "main": "desktop/main.js"
+    },
+    "win": {
+      "icon": "desktop/icons/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Minecraft Server Manager",
+      "artifactName": "Minecraft-Server-Manager-Setup-${version}.${ext}"
+    },
+    "mac": {
+      "icon": "desktop/icons/icon.png",
+      "category": "public.app-category.utilities",
+      "target": [
+        "dmg"
+      ]
+    },
+    "linux": {
+      "icon": "desktop/icons/icon.png",
+      "category": "Utility",
+      "target": [
+        "AppImage"
+      ],
+      "synopsis": "Run and monitor Minecraft servers locally"
+    }
+  }
+}

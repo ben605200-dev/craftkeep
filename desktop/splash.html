@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'" />
+    <title>Starting…</title>
+    <style>
+      /*
+       * Self-contained on purpose: the splash appears before the manager has
+       * bound a port, so it cannot depend on the web server that serves the
+       * real UI.
+       */
+      :root {
+        --bg: #08090c;
+        --text: #ececed;
+        --muted: #8b8b96;
+        --accent: #10b981;
+        --accent-soft: #34d399;
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, "Segoe UI Variable Display", "Segoe UI", Inter, system-ui, sans-serif;
+        -webkit-user-select: none;
+        user-select: none;
+        overflow: hidden;
+        /* Frameless window: make the whole surface draggable. */
+        -webkit-app-region: drag;
+      }
+
+      body {
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        gap: 2px;
+        text-align: center;
+        padding: 26px;
+      }
+
+      /* Ambient bloom, matching the dashboard */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: -40%;
+        background:
+          radial-gradient(circle at 22% 18%, rgba(16, 185, 129, 0.22), transparent 46%),
+          radial-gradient(circle at 82% 88%, rgba(99, 102, 241, 0.18), transparent 46%);
+        pointer-events: none;
+      }
+
+      .mark {
+        width: 74px;
+        height: 74px;
+        margin-bottom: 12px;
+        border-radius: 20px;
+        box-shadow:
+          0 18px 44px -14px rgba(16, 185, 129, 0.55),
+          0 0 0 1px rgba(255, 255, 255, 0.06);
+        animation: rise 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(8px) scale(0.94); }
+        to   { opacity: 1; transform: none; }
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 620;
+        letter-spacing: -0.02em;
+      }
+
+      #status {
+        margin: 0;
+        font-size: 12.5px;
+        color: var(--muted);
+        min-height: 1.4em;
+        transition: color 160ms ease;
+      }
+
+      #status.error { color: #f43f5e; }
+
+      .bar {
+        position: relative;
+        width: 190px;
+        height: 3px;
+        margin-top: 16px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      .bar span {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 38%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, transparent, var(--accent-soft), transparent);
+        animation: slide 1.25s cubic-bezier(0.32, 0.72, 0, 1) infinite;
+      }
+
+      @keyframes slide {
+        from { transform: translateX(-110%); }
+        to   { transform: translateX(320%); }
+      }
+
+      .version {
+        position: fixed;
+        bottom: 9px;
+        font-size: 10.5px;
+        color: #45454e;
+        letter-spacing: 0.02em;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .mark { animation: none; }
+        .bar span { animation-duration: 2.4s; }
+      }
+    </style>
+  </head>
+  <body>
+    <img class="mark" src="icons/icon.png" alt="" />
+    <h1>Minecraft Server Manager</h1>
+    <p id="status">Starting the local service…</p>
+    <div class="bar"><span></span></div>
+    <div class="version" id="version"></div>
+
+    <!--
+      No script tag: the splash runs with contextIsolation disabled and a small
+      preload that writes into this DOM directly. That also lets the CSP stay
+      maximally strict (no script-src at all).
+    -->
+  </body>
+</html>

@@ -1,0 +1,186 @@
+/*
+ * Download page for Minecraft Server Manager.
+ *
+ * Hand-written, no dependencies, no web fonts — the same philosophy as the app
+ * itself. Colours mirror the app's theme (rose primary, emerald / indigo /
+ * violet accents on a near-black background).
+ */
+
+:root {
+  --bg: #08090d;
+  --panel: rgba(255, 255, 255, 0.028);
+  --panel-strong: rgba(255, 255, 255, 0.05);
+  --line: rgba(255, 255, 255, 0.085);
+  --line-soft: rgba(255, 255, 255, 0.055);
+  --text: #e8eaf0;
+  --muted: #9aa1ae;
+  --faint: #6b7280;
+  --rose: #f43f5e;
+  --rose-300: #fda4af;
+  --rose-400: #fb7185;
+  --emerald: #34d399;
+  --indigo: #818cf8;
+  --violet: #a78bfa;
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1100px 520px at 18% -8%, rgba(244, 63, 94, 0.14), transparent 60%),
+    radial-gradient(900px 460px at 88% -4%, rgba(167, 139, 250, 0.11), transparent 62%),
+    var(--bg);
+  color: var(--text);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--rose-400); text-decoration: none; }
+a:hover { color: var(--rose-300); }
+
+img { max-width: 100%; display: block; }
+
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+/* ------------------------------------------------------------------ nav */
+
+.nav {
+  position: sticky; top: 0; z-index: 10;
+  backdrop-filter: blur(12px);
+  background: rgba(8, 9, 13, 0.72);
+  border-bottom: 1px solid var(--line-soft);
+}
+.nav__inner {
+  display: flex; align-items: center; gap: 1rem;
+  height: 60px;
+}
+.brand { display: flex; align-items: center; gap: 0.6rem; color: var(--text); font-weight: 650; letter-spacing: -0.02em; }
+.brand:hover { color: var(--text); }
+.brand img { border-radius: 7px; }
+.nav nav { margin-left: auto; display: flex; align-items: center; gap: 1.4rem; }
+.nav nav a { color: var(--muted); font-size: 0.9rem; font-weight: 550; }
+.nav nav a:hover { color: var(--text); }
+
+/* ----------------------------------------------------------------- hero */
+
+.hero { padding: 72px 0 36px; text-align: center; }
+.eyebrow {
+  display: inline-block;
+  margin: 0 0 18px;
+  padding: 5px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+}
+.hero h1 { margin: 0 auto 18px; max-width: 840px; font-size: clamp(2rem, 4.6vw, 3.4rem); line-height: 1.12; letter-spacing: -0.035em; }
+.grad {
+  background: linear-gradient(100deg, var(--rose-300), var(--violet) 70%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.lede { margin: 0 auto 30px; max-width: 680px; color: var(--muted); font-size: 1.08rem; }
+
+.cta { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.72rem 1.35rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--panel-strong);
+  color: var(--text); font-weight: 640; font-size: 0.95rem;
+  transition: border-color 0.15s, transform 0.12s, filter 0.15s;
+}
+.btn:hover { border-color: rgba(255, 255, 255, 0.22); color: var(--text); transform: translateY(-1px); }
+.btn--primary {
+  background: linear-gradient(180deg, var(--rose-400), var(--rose));
+  border-color: transparent; color: #20060c;
+  box-shadow: 0 10px 30px -12px rgba(244, 63, 94, 0.55);
+}
+.btn--primary:hover { color: #20060c; filter: brightness(1.07); }
+.btn small { font-weight: 550; opacity: 0.72; }
+.note { margin: 16px 0 0; color: var(--faint); font-size: 0.85rem; }
+
+.shot { display: block; margin: 44px auto 0; max-width: 1000px; }
+.shot img {
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.9);
+}
+
+/* ------------------------------------------------------------- sections */
+
+section { padding: 64px 0; }
+h2 { margin: 0 0 8px; font-size: 1.7rem; letter-spacing: -0.03em; }
+.sub { margin: 0 0 34px; color: var(--muted); }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.card {
+  padding: 22px 22px 20px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  background: var(--panel);
+}
+.card h3 { margin: 14px 0 8px; font-size: 1.02rem; letter-spacing: -0.015em; }
+.card p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+.card .ico {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 9px;
+  font-size: 18px;
+  background: rgba(244, 63, 94, 0.13); border: 1px solid rgba(244, 63, 94, 0.25);
+}
+.card .ico--emerald { background: rgba(52, 211, 153, 0.12); border-color: rgba(52, 211, 153, 0.24); }
+.card .ico--indigo { background: rgba(129, 140, 248, 0.12); border-color: rgba(129, 140, 248, 0.26); }
+.card .ico--violet { background: rgba(167, 139, 250, 0.12); border-color: rgba(167, 139, 250, 0.26); }
+
+/* ------------------------------------------------------------- download */
+
+.dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 22px; }
+.dl .card { display: flex; flex-direction: column; gap: 10px; }
+.dl .btn { justify-content: center; margin-top: auto; }
+.dl .meta { color: var(--faint); font-size: 0.8rem; }
+
+.callout {
+  border: 1px solid rgba(129, 140, 248, 0.28);
+  background: rgba(129, 140, 248, 0.07);
+  border-radius: var(--r-md);
+  padding: 18px 20px;
+  color: var(--muted); font-size: 0.92rem;
+}
+.callout strong { color: var(--text); }
+.callout code {
+  padding: 2px 7px; border-radius: 6px;
+  background: rgba(0, 0, 0, 0.35); border: 1px solid var(--line-soft);
+  font-family: ui-monospace, Consolas, monospace; font-size: 0.85em; color: var(--text);
+}
+
+/* ---------------------------------------------------------- screenshots */
+
+.shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+.shots figure { margin: 0; }
+.shots img {
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.shots a:hover img { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.2); }
+.shots figcaption { margin-top: 8px; color: var(--faint); font-size: 0.82rem; }
+
+/* -------------------------------------------------------------- footer */
+
+footer { border-top: 1px solid var(--line-soft); padding: 30px 0 40px; color: var(--faint); font-size: 0.88rem; }
+footer .wrap { display: flex; gap: 1.2rem; flex-wrap: wrap; align-items: center; }
+footer nav { margin-left: auto; display: flex; gap: 1.2rem; }
+footer a { color: var(--muted); }
+footer a:hover { color: var(--text); }
+
+@media (max-width: 640px) {
+  .nav nav a:not(#nav-github) { display: none; }
+  .hero { padding-top: 48px; }
+}

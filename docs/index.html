@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minecraft Server Manager — run Minecraft servers without the command line</title>
+<meta name="description" content="A free Windows desktop app that provisions, runs and monitors Vanilla, Paper and Fabric Minecraft servers — live console, scheduled backups, and one-click playit.gg tunnelling that works behind CGNAT.">
+<meta property="og:title" content="Minecraft Server Manager">
+<meta property="og:description" content="Run and monitor Minecraft servers on Windows without the command line.">
+<meta property="og:type" content="website">
+<link rel="icon" href="img/icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<!-- The owner/repo pair lives here once; the script below builds every link from it. -->
+<body data-repo="ben605200-dev/MSM">
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="./">
+      <img src="img/icon.png" alt="" width="28" height="28">
+      <span>Minecraft Server Manager</span>
+    </a>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#download">Download</a>
+      <a href="#screenshots">Screenshots</a>
+      <a id="nav-github" href="#download">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <p class="eyebrow">Free · Open source · Windows 10/11</p>
+    <h1>Run a Minecraft server <span class="grad">without the command line</span></h1>
+    <p class="lede">
+      One desktop app that provisions Paper, Fabric or Vanilla, works out which Java the
+      version needs, streams the console live, keeps scheduled backups, and gets players in
+      from anywhere — even on connections where port forwarding is impossible.
+    </p>
+    <div class="cta">
+      <a class="btn btn--primary" id="dl-installer" href="#download">Download for Windows</a>
+      <a class="btn" id="dl-zip" href="#download">Portable .zip</a>
+    </div>
+    <p class="note" id="dl-note">Installer and portable zip · no admin rights needed</p>
+
+    <a class="shot" href="img/dashboard.png" title="Open the full-size screenshot">
+      <img src="img/dashboard.png" alt="The dashboard showing a stopped server, system memory, installed Java runtimes and server controls" width="1920" height="983">
+    </a>
+  </section>
+
+  <section id="features">
+    <h2>What it does</h2>
+    <p class="sub">Everything a server host should handle, so you never touch a jar file, a flag or a batch script.</p>
+    <div class="cards">
+      <div class="card">
+        <span class="ico">⬇</span>
+        <h3>Real provisioning</h3>
+        <p>Vanilla, Paper and Fabric with every version fetched from the source of truth
+        (Mojang, PaperMC, Fabric Meta). The jar's SHA-256 is verified where the provider
+        publishes one. EULA accepted, <code>server.properties</code> tuned, startup script written.</p>
+      </div>
+      <div class="card">
+        <span class="ico ico--indigo">⌨</span>
+        <h3>Live console, no terminal</h3>
+        <p>Streaming stdout and stderr with command input, coloured log levels, and a command
+        palette (<kbd>Ctrl</kbd>+<kbd>K</kbd>) for the things you do often — restart, backup,
+        broadcast a message to players.</p>
+      </div>
+      <div class="card">
+        <span class="ico ico--emerald">🌐</span>
+        <h3>Players can actually join</h3>
+        <p>Detects carrier-grade NAT — the case where port forwarding <em>cannot</em> work no
+        matter how the router is configured — and sets up a playit.gg tunnel in one click.
+        UPnP is used when it genuinely helps.</p>
+      </div>
+      <div class="card">
+        <span class="ico ico--violet">🗄</span>
+        <h3>Backups &amp; schedules</h3>
+        <p>Zip backups of worlds and configuration, automatic retention, and schedules for
+        restarts and backups. A restart can take a safety backup first.</p>
+      </div>
+      <div class="card">
+        <span class="ico ico--emerald">📄</span>
+        <h3>Files, players &amp; properties</h3>
+        <p>Edit <code>server.properties</code> with descriptions for every setting, manage ops,
+        whitelist and bans, and browse server files — all from the app.</p>
+      </div>
+      <div class="card">
+        <span class="ico ico--indigo">☕</span>
+        <h3>Java handled for you</h3>
+        <p>Detects the JDKs you already have, picks the right major version for each server
+        release, and offers to fetch a matching Temurin JDK from Adoptium when one is missing.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="download">
+    <h2>Download</h2>
+    <p class="sub" id="dl-sub">Windows 10 or 11, 64-bit. Both downloads are also on the GitHub releases page.</p>
+    <div class="dl">
+      <div class="card">
+        <h3>Installer <span class="meta" id="meta-exe"></span></h3>
+        <p>Adds the app to your user folder with Start Menu and desktop shortcuts. Per-user —
+        no administrator rights needed.</p>
+        <a class="btn btn--primary" id="dl-installer-2" href="#download">Minecraft-Server-Manager-Setup.exe</a>
+      </div>
+      <div class="card">
+        <h3>Portable .zip <span class="meta" id="meta-zip"></span></h3>
+        <p>Unzip anywhere and run <strong>Minecraft Server Manager.exe</strong>. Nothing is
+        installed; keep the folder together.</p>
+        <a class="btn" id="dl-zip-2" href="#download">Minecraft-Server-Manager-win-x64.zip</a>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Windows will warn you the first time.</strong>
+      The app is not code-signed, so SmartScreen says “Windows protected your PC”. Click
+      <strong>More info</strong>, then <strong>Run anyway</strong>. Every release also ships
+      <code>SHA256SUMS.txt</code> and step-by-step notes (<code>HOW-TO-INSTALL.txt</code>) if
+      you want to verify the file before running it:
+      <code>Get-FileHash .\Minecraft-Server-Manager-Setup.exe -Algorithm SHA256</code>.
+    </div>
+  </section>
+
+  <section id="screenshots">
+    <h2>Screenshots</h2>
+    <p class="sub">The app at rest: health checks, every server setting with a description, and player management.</p>
+    <div class="shots">
+      <figure>
+        <a href="img/overview.png"><img src="img/overview.png" alt="Server overview with health checks and the server folder" width="1920" height="983"></a>
+        <figcaption>Server overview — health checks, live metrics, server folder</figcaption>
+      </figure>
+      <figure>
+        <a href="img/properties.png"><img src="img/properties.png" alt="The properties editor with a search box and grouped settings" width="1920" height="983"></a>
+        <figcaption>server.properties — 50+ settings, each explained, with a raw editor</figcaption>
+      </figure>
+      <figure>
+        <a href="img/players.png"><img src="img/players.png" alt="Players tab with operators, whitelist and bans" width="1920" height="983"></a>
+        <figcaption>Players — operators, whitelist and bans without typing JSON</figcaption>
+      </figure>
+      <figure>
+        <a href="img/dashboard.png"><img src="img/dashboard.png" alt="The dashboard with system memory and Java runtimes" width="1920" height="983"></a>
+        <figcaption>Dashboard — system memory, Java runtimes, per-server cards</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="requirements">
+    <h2>Requirements</h2>
+    <div class="cards">
+      <div class="card">
+        <span class="ico">🪟</span>
+        <h3>Windows 10 or 11, 64-bit</h3>
+        <p>Per-user install; no administrator rights. Built with Electron, so it looks and
+        behaves like a normal desktop app — tray icon, native menus, notifications.</p>
+      </div>
+      <div class="card">
+        <span class="ico ico--indigo">☕</span>
+        <h3>No Java required to start</h3>
+        <p>If a matching JDK is missing, the setup wizard offers to download Temurin from
+        Adoptium automatically. Existing installs are detected either way.</p>
+      </div>
+      <div class="card">
+        <span class="ico ico--emerald">📶</span>
+        <h3>An internet connection</h3>
+        <p>Server jars, libraries and the tunnel agent are downloaded on demand. After that,
+        your servers run entirely on your machine.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Minecraft Server Manager · MIT licensed</span>
+    <nav>
+      <a id="foot-github" href="#">Repository</a>
+      <a id="foot-releases" href="#">Releases</a>
+      <a id="foot-issues" href="#">Issues</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+/*
+ * Fill every download link from the latest GitHub release.
+ *
+ * The repo lives in `data-repo` on <body>, so the page works unchanged on
+ * github.io, a custom domain or a local preview. If the API call fails (rate
+ * limit, offline), the buttons keep pointing at the releases page, which is
+ * always correct.
+ */
+(() => {
+  const repo = document.body.dataset.repo || '';
+  const repoUrl = `https://github.com/${repo}`;
+  const releasesUrl = `${repoUrl}/releases/latest`;
+
+  const links = {
+    installer: [document.getElementById('dl-installer'), document.getElementById('dl-installer-2')],
+    zip: [document.getElementById('dl-zip'), document.getElementById('dl-zip-2')],
+    note: document.getElementById('dl-note'),
+    metaExe: document.getElementById('meta-exe'),
+    metaZip: document.getElementById('meta-zip'),
+  };
+
+  document.getElementById('nav-github').href = repoUrl;
+  document.getElementById('foot-github').href = repoUrl;
+  document.getElementById('foot-releases').href = `${repoUrl}/releases`;
+  document.getElementById('foot-issues').href = `${repoUrl}/issues`;
+
+  for (const group of Object.values(links)) {
+    const nodes = Array.isArray(group) ? group : [group];
+    for (const node of nodes) if (node && node.tagName === 'A') node.href = releasesUrl;
+  }
+
+  if (!repo || repo.startsWith('OWNER')) return;
+
+  const mb = (bytes) => `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+
+  fetch(`https://api.github.com/repos/${repo}/releases/latest`)
+    .then((r) => (r.ok ? r.json() : null))
+    .then((release) => {
+      if (!release) return;
+
+      const exe = (release.assets || []).find((a) => a.name.endsWith('.exe'));
+      const zip = (release.assets || []).find((a) => a.name.endsWith('.zip'));
+
+      if (exe) {
+        for (const node of links.installer) { node.href = exe.browser_download_url; }
+        links.metaExe.textContent = `· ${mb(exe.size)}`;
+      }
+      if (zip) {
+        for (const node of links.zip) { node.href = zip.browser_download_url; }
+        links.metaZip.textContent = `· ${mb(zip.size)}`;
+      }
+      links.note.textContent =
+        `${release.tag_name} · installer ${exe ? mb(exe.size) : ''} · portable ${zip ? mb(zip.size) : ''}`.replace(/ · portable $/, '');
+    })
+    .catch(() => { /* fall back to the releases page */ });
+})();
+</script>
+
+</body>
+</html>

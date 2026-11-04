@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content="Provision, run and monitor Minecraft servers from one sleek local dashboard." />
+    <title>Minecraft Server Manager</title>
+
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230e1014'/%3E%3Cpath d='M16 5l9 5.2v11.6L16 27l-9-5.2V10.2z' fill='none' stroke='%2310b981' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M7 10.2l9 5.2 9-5.2M16 15.4V27' stroke='%2334d399' stroke-width='1.4' opacity='.7' fill='none'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="stylesheet" href="/css/views.css" />
+  </head>
+
+  <body>
+    <!-- Ambient background blooms -->
+    <div class="ambient" aria-hidden="true">
+      <div class="ambient__bloom ambient__bloom--a"></div>
+      <div class="ambient__bloom ambient__bloom--b"></div>
+      <div class="ambient__bloom ambient__bloom--c"></div>
+      <div class="ambient__grain"></div>
+    </div>
+
+    <!-- Boot splash, replaced by the app shell once the API answers -->
+    <div id="boot" class="boot">
+      <div class="boot__mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="52" height="52">
+          <path d="M16 4l10 5.8v12.4L16 28 6 22.2V9.8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+          <path d="M6 9.8l10 5.8 10-5.8M16 15.6V28" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".55" />
+        </svg>
+      </div>
+      <p class="boot__title">Minecraft Server Manager</p>
+      <p class="boot__status" id="boot-status">Connecting to the local service…</p>
+      <div class="boot__bar"><span></span></div>
+    </div>
+
+    <!-- Application shell -->
+    <div id="app" class="app" hidden>
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar__brand">
+          <span class="brand__mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" width="26" height="26">
+              <path d="M16 4l10 5.8v12.4L16 28 6 22.2V9.8z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
+              <path d="M6 9.8l10 5.8 10-5.8M16 15.6V28" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".5" />
+            </svg>
+          </span>
+          <span class="brand__text">
+            <strong>Server Manager</strong>
+            <small id="brand-version">v1.0.0</small>
+          </span>
+          <button class="sidebar__collapse" id="sidebar-collapse" type="button" title="Collapse sidebar" aria-label="Collapse sidebar">
+            <span class="chevron"></span>
+          </button>
+        </div>
+
+        <nav class="sidebar__nav" id="sidebar-nav" aria-label="Main">
+          <a class="navitem" data-route="#/dashboard" href="#/dashboard">
+            <span class="navitem__icon" data-icon="gauge"></span>
+            <span class="navitem__label">Dashboard</span>
+          </a>
+          <a class="navitem" data-route="#/servers" href="#/servers">
+            <span class="navitem__icon" data-icon="server"></span>
+            <span class="navitem__label">Servers</span>
+            <span class="navitem__count" id="nav-server-count">0</span>
+          </a>
+          <a class="navitem" data-route="#/create" href="#/create">
+            <span class="navitem__icon" data-icon="plus"></span>
+            <span class="navitem__label">Create server</span>
+          </a>
+          <a class="navitem" data-route="#/backups" href="#/backups">
+            <span class="navitem__icon" data-icon="archive"></span>
+            <span class="navitem__label">Backups</span>
+          </a>
+          <a class="navitem" data-route="#/settings" href="#/settings">
+            <span class="navitem__icon" data-icon="settings"></span>
+            <span class="navitem__label">Settings</span>
+          </a>
+        </nav>
+
+        <div class="sidebar__section">
+          <div class="sidebar__heading">
+            <span>Live servers</span>
+            <button class="iconbtn iconbtn--xs" id="sidebar-refresh" type="button" title="Refresh">
+              <span data-icon="refresh"></span>
+            </button>
+          </div>
+          <div class="miniservers" id="miniservers"></div>
+        </div>
+
+        <div class="sidebar__foot" id="sidebar-foot"></div>
+      </aside>
+
+      <div class="sidebar-scrim" id="sidebar-scrim"></div>
+
+      <main class="main">
+        <header class="topbar">
+          <button class="iconbtn topbar__menu" id="topbar-menu" type="button" aria-label="Open navigation">
+            <span data-icon="menu"></span>
+          </button>
+          <div class="topbar__crumbs" id="crumbs"></div>
+          <div class="topbar__spacer"></div>
+          <div class="topbar__stats" id="topbar-stats"></div>
+          <div class="topbar__actions" id="topbar-actions"></div>
+        </header>
+
+        <div class="view" id="view" role="main"></div>
+      </main>
+    </div>
+
+    <!-- Overlays -->
+    <div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+    <div class="modal-root" id="modal-root" hidden></div>
+    <div class="cmdk" id="cmdk" hidden></div>
+
+    <script type="module" src="/js/main.js"></script>
+  </body>
+</html>
