@@ -16,7 +16,8 @@ anywhere except the jar downloads from Mojang / PaperMC / Fabric.
 ## Download
 
 **[Download for Windows](releases/latest)** — installer or portable `.zip`, from the latest
-GitHub release.
+GitHub release. There is also a download page with screenshots and install notes:
+**<https://ben605200-dev.github.io/MSM/>**
 
 - **Installer** — per-user, no administrator rights required; adds Start Menu and desktop
   shortcuts.
@@ -274,6 +275,22 @@ fails the build if any local state has leaked in — `data/`, `servers/`, `.env`
 archives — then asserts the entry point, UI and runtime dependencies are all present. An
 installed app keeps every bit of its state in the recipient's own
 `%APPDATA%\Minecraft Server Manager`; nothing is shared between machines.
+
+### Publishing a release
+
+The repo at `github.com/ben605200-dev/MSM` distributes the same files through GitHub — the
+download page reads the newest release automatically, so nothing on the site needs editing:
+
+```powershell
+# 1. Bump "version" in package.json, then build
+npm run dist
+
+# 2. Tag it and attach the artifacts (name them for the new version)
+gh release create v1.0.1 --title "v1.0.1" --notes "What changed..." `
+  "dist-app\Minecraft-Server-Manager-Setup-1.0.1.exe" `
+  "dist-app\Minecraft-Server-Manager-1.0.1-win-x64.zip" `
+  "dist-app\SHA256SUMS.txt" "dist-app\HOW-TO-INSTALL.txt"
+```
 
 <br>
 
