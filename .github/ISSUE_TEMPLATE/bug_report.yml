@@ -1,0 +1,98 @@
+name: Bug report
+description: Something is broken or behaves unexpectedly.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this — details make fixes much faster.
+
+        **Security problems do not belong here.** If you found a way to reach the app's
+        local API, leak the session token, or write outside a server's folder, please use
+        the [Security policy](https://github.com/ben605200-dev/craftkeep/security/policy)
+        instead of a public issue.
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Before you file
+      options:
+        - label: I searched the existing issues and this is not a duplicate.
+          required: true
+        - label: I am running the latest release (v1.1.0 or newer).
+          required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the problem, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open ...
+        2. Click ...
+        3. See the error
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where does it happen?
+      options:
+        - Starting / stopping / console
+        - Creating a server (wizard, downloads)
+        - Properties / Files / Players tabs
+        - Backups / Automation
+        - Connect tab / playit.gg tunnel
+        - Java detection / JDK downloads
+        - Settings / window / tray
+        - Not sure / somewhere else
+    validations:
+      required: true
+  - type: input
+    id: app-version
+    attributes:
+      label: Craftkeep version
+      description: Shown at the bottom of Settings, or next to the app name in the sidebar.
+      placeholder: "1.1.0"
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      placeholder: "Windows 11 24H2"
+    validations:
+      required: true
+  - type: input
+    id: server
+    attributes:
+      label: Server software and version
+      description: If a specific server is involved.
+      placeholder: "Paper 1.21.11"
+    validations:
+      required: false
+  - type: input
+    id: java
+    attributes:
+      label: Java version
+      description: What Settings › Java lists for that server.
+      placeholder: "Temurin 21.0.5"
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs and screenshots
+      description: |
+        The most useful attachment is the manager's own log: **Settings › Where are my
+        files?** opens the folder; the current file is `data\logs\manager-<date>.log`.
+        If a specific server crashed, its `logs\latest.log` and `crash-reports\` help too.
+        Drag the file in, or paste the relevant lines.
+      render: text
+    validations:
+      required: false

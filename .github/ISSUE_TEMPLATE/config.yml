@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security policy — report a vulnerability
+    url: https://github.com/ben605200-dev/craftkeep/security/policy
+    about: Please report security problems privately instead of opening a public issue.
+  - name: Download page
+    url: https://ben605200-dev.github.io/craftkeep/
+    about: Installers, system requirements and installation notes.

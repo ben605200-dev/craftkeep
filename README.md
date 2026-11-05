@@ -420,3 +420,14 @@ window normally leaves them running in the tray. Quitting always stops them clea
   desynchronise.
 - Only Vanilla, Paper and Fabric are supported. Bukkit/Spigot/Forge were left out deliberately:
   Forge needs an installer with a licence prompt, and Bukkit's jar distribution is not stable.
+
+<br>
+
+## Contributing
+
+Bug reports and pull requests are welcome — [CONTRIBUTING.md](CONTRIBUTING.md) has the
+development setup, the commands to run before opening a PR, and the ground rules that keep
+the design coherent. Security problems should go through the
+[security policy](SECURITY.md) rather than a public issue.
+
+This project follows the [Contributor Covenant](CODE_OF_CONDUCT.md) code of conduct.

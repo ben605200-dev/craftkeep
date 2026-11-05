@@ -1,0 +1,47 @@
+name: Feature request
+description: Suggest an improvement or a new capability.
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: Describe the situation where the app falls short, rather than jumping straight to a solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you have considered
+      description: Other tools, workarounds, or different designs for the same problem.
+    validations:
+      required: false
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part of the app does this touch?
+      options:
+        - Server provisioning / versions
+        - Console / starting / stopping
+        - Backups / Automation
+        - Player management
+        - Connect tab / tunnelling / networking
+        - Java handling
+        - Interface / look and feel
+        - Something new
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: A quick scope check
+      options:
+        - label: This is about the desktop app itself (it is not a request to bring back a web/browser version — see the README for why there is none).
+          required: false
