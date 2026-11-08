@@ -14,6 +14,7 @@ import { getSettings } from '../settings-cache.js';
 import api from '../api.js';
 import ws from '../ws.js';
 import desktop from '../desktop.js';
+import { isIdle } from '../perf.js';
 
 // ===========================================================================
 // Properties
@@ -1084,6 +1085,7 @@ export function createTunnelPanel({ port, cgnat = false }) {
 
   // Belt and braces while a claim is pending.
   pollTimer = setInterval(() => {
+    if (isIdle()) return;
     if (snapshot?.claim) refresh();
   }, 5000);
 

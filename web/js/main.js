@@ -26,6 +26,7 @@ import { statusDot } from './components.js';
 import api from './api.js';
 import ws from './ws.js';
 import desktop from './desktop.js';
+import { isIdle } from './perf.js';
 
 // ---------------------------------------------------------------------------
 // Routes
@@ -211,14 +212,16 @@ async function boot_() {
   updateNavCount();
 
   // Keep the clocks honest, and let a missed state transition self-heal.
+  // Skipped while idle (hidden or blurred): there is nobody to show it to, and
+  // an app that is not being looked at should cost nothing (see perf.js).
   setInterval(() => {
-    if (document.hidden) return;
+    if (isIdle()) return;
     renderTopbarStats();
     renderConnectionPill();
   }, 5000);
 
   setInterval(() => {
-    if (document.hidden) return;
+    if (isIdle()) return;
     renderMiniServers();
   }, 30_000);
 }

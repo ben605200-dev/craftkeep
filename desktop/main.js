@@ -236,6 +236,24 @@ function createMainWindow(url, { route = null } = {}) {
 
   if (bounds.maximized) mainWindow.maximize();
 
+  /*
+   * Tell the backend when nobody is looking.
+   *
+   * While the window is hidden, minimised or simply not focused — the normal
+   * state while a game is fullscreen — the manager stops per-process sampling.
+   * On Windows that sampling is a PowerShell process spawn every couple of
+   * seconds, competing with whatever else the machine is doing.
+   */
+  const syncSamplingMode = () => {
+    if (!mainWindow || mainWindow.isDestroyed()) return;
+    const background = !mainWindow.isVisible() || mainWindow.isMinimized() || !mainWindow.isFocused();
+    manager?.registry?.setBackgroundMode?.(background);
+  };
+  for (const event of ['focus', 'blur', 'show', 'hide', 'minimize', 'restore']) {
+    mainWindow.on(event, syncSamplingMode);
+  }
+  syncSamplingMode();
+
   // Load the backend URL. A `--route` argument opens straight onto a page.
   mainWindow.loadURL(route ? `${url}/${route}` : url);
 

@@ -40,6 +40,8 @@ export class ServerRegistry extends EventEmitter {
     /** Raw persisted definitions, keyed by id. */
     this.definitions = new Map();
     this.sampler = null;
+    /** True while the window is hidden or blurred — see setBackgroundMode(). */
+    this.backgroundMode = false;
     this.ready = false;
     this.systemSample = { cpuPercent: 0, memory: null, sampledAt: null };
   }
@@ -281,51 +283,67 @@ export class ServerRegistry extends EventEmitter {
 
   #startSampler() {
     if (this.sampler) return;
-    const tick = async () => {
-      try {
-        const pids = [];
-        for (const managed of this.servers.values()) {
-          if (managed.pid) pids.push(managed.pid);
-        }
-
-        const [samples] = await Promise.all([pids.length ? sampleProcesses(pids) : Promise.resolve(new Map())]);
-
-        for (const managed of this.servers.values()) {
-          if (!managed.pid) {
-            // Nothing to sample; report 0 so the sparkline decays cleanly.
-            if (managed.status === STATUS.STOPPED && managed.history.length && managed.metrics.sampledAt) {
-              managed.metrics = { ...managed.metrics, cpuPercent: 0, rssBytes: 0, sampledAt: Date.now() };
-            }
-            continue;
-          }
-          const sample = samples.get(managed.pid);
-          managed.applySample(sample);
-          // Adopted or otherwise unspawned processes can vanish without an exit event.
-          if (!sample && managed.adopted && managed.status !== STATUS.STOPPED) {
-            const stillAlive = await isProcessAlive(managed.pid);
-            if (!stillAlive) {
-              managed.status = STATUS.STOPPED;
-              managed.pid = null;
-              managed.console.push('\n[manager] The adopted process is no longer running.\n', 'stdout');
-              this.emit('status', { serverId: managed.id, status: STATUS.STOPPED, from: STATUS.RUNNING });
-            }
-          }
-        }
-
-        this.systemSample = { cpuPercent: systemCpuPercent(), memory: systemMemory(), sampledAt: Date.now() };
-        this.emit('metrics', {
-          servers: [...this.servers.values()].map((s) => s.metricsSnapshot()),
-          system: this.systemSample,
-        });
-      } catch (error) {
-        log.debug(`Sampler tick failed: ${error.message}`);
-      }
-    };
-
-    this.sampler = setInterval(tick, config.statsIntervalMs);
+    this.sampler = setInterval(() => void this.#sample(), config.statsIntervalMs);
     this.sampler.unref?.();
     // Prime the CPU delta immediately so the first real reading isn't 0.
-    setTimeout(tick, 250).unref?.();
+    setTimeout(() => void this.#sample(), 250).unref?.();
+  }
+
+  /**
+   * Suspend or resume per-process sampling.
+   *
+   * On Windows every sample is a PowerShell process spawn (see stats.js), and
+   * the numbers are only ever shown inside the app's own window. Running that
+   * every couple of seconds while the user is in a game — the normal way this
+   * app is used — is pure waste on the same CPU the game needs.
+   */
+  setBackgroundMode(on) {
+    const next = Boolean(on);
+    if (next === this.backgroundMode) return;
+    this.backgroundMode = next;
+    if (!next) void this.#sample(); // fresh numbers the moment the window returns
+  }
+
+  async #sample() {
+    if (this.backgroundMode) return;
+    try {
+      const pids = [];
+      for (const managed of this.servers.values()) {
+        if (managed.pid) pids.push(managed.pid);
+      }
+
+      const [samples] = await Promise.all([pids.length ? sampleProcesses(pids) : Promise.resolve(new Map())]);
+
+      for (const managed of this.servers.values()) {
+        if (!managed.pid) {
+          // Nothing to sample; report 0 so the sparkline decays cleanly.
+          if (managed.status === STATUS.STOPPED && managed.history.length && managed.metrics.sampledAt) {
+            managed.metrics = { ...managed.metrics, cpuPercent: 0, rssBytes: 0, sampledAt: Date.now() };
+          }
+          continue;
+        }
+        const sample = samples.get(managed.pid);
+        managed.applySample(sample);
+        // Adopted or otherwise unspawned processes can vanish without an exit event.
+        if (!sample && managed.adopted && managed.status !== STATUS.STOPPED) {
+          const stillAlive = await isProcessAlive(managed.pid);
+          if (!stillAlive) {
+            managed.status = STATUS.STOPPED;
+            managed.pid = null;
+            managed.console.push('\n[manager] The adopted process is no longer running.\n', 'stdout');
+            this.emit('status', { serverId: managed.id, status: STATUS.STOPPED, from: STATUS.RUNNING });
+          }
+        }
+      }
+
+      this.systemSample = { cpuPercent: systemCpuPercent(), memory: systemMemory(), sampledAt: Date.now() };
+      this.emit('metrics', {
+        servers: [...this.servers.values()].map((s) => s.metricsSnapshot()),
+        system: this.systemSample,
+      });
+    } catch (error) {
+      log.debug(`Sampler tick failed: ${error.message}`);
+    }
   }
 
   stopSampler() {

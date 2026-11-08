@@ -16,13 +16,19 @@
    Sidebar
    -------------------------------------------------------------------------- */
 
+/*
+ * Deliberately not glass.
+ *
+ * The sidebar is always on screen, and a backdrop-filter here meant re-blurring
+ * it every frame that the animated background moved — the single largest
+ * per-frame cost in the app. At this opacity the visual difference is
+ * invisible, and the compositor gets to sit still.
+ */
 .sidebar {
   position: relative;
   display: flex; flex-direction: column;
   min-height: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.012)), rgba(8, 9, 12, 0.72);
-  backdrop-filter: blur(28px) saturate(150%);
-  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.012)), rgba(8, 9, 12, 0.9);
   border-right: 1px solid var(--line);
   transition: width var(--t-med) var(--ease);
   z-index: 20;
@@ -164,13 +170,13 @@
 
 .main { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
 
+/* Same reasoning as the sidebar: permanent chrome does not get a backdrop-filter. */
 .topbar {
   display: flex; align-items: center; gap: 0.7rem;
   height: var(--topbar-h); flex: none;
   padding: 0 1.35rem;
   border-bottom: 1px solid var(--line-soft);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.026), transparent);
-  backdrop-filter: blur(14px);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.026), transparent), rgba(9, 10, 15, 0.6);
   z-index: 15;
 }
 .topbar__menu { display: none; }

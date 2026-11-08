@@ -6,6 +6,7 @@
  */
 
 import { el, mount, frag, uuid, isNearBottom, scrollToBottom, downloadText, copyText } from '../dom.js';
+import { isIdle } from '../perf.js';
 import { icon } from '../icons.js';
 import {
   statusBadge,
@@ -1075,6 +1076,8 @@ export async function renderServer({ params }) {
       clearInterval(ticker);
       return;
     }
+    // Nobody is watching the uptime while the window is in the background.
+    if (isIdle()) return;
     const server = getServer(serverId);
     if (!server || !['running', 'starting', 'stopping'].includes(server.status)) return;
     const host = metricsHost.querySelectorAll('.dmetric__value')[3];
